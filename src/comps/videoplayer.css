@@ -1,0 +1,8 @@
+.agora_video_player {
+  width: 640px;
+  height: 480px;
+}
+.player > div {
+  width: 640px;
+  height: 480px;
+}
