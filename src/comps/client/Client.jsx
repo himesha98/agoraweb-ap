@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import "./video.css";
+import "./client.css";
 import Videplayer from "../Videplayer";
 import useId from "react-use-uuid";
 import axios from "axios";
@@ -16,7 +16,7 @@ import { useEffect } from "react";
     </>
   );
 };*/
-const Video = () => {
+const Client = () => {
   const [showlocalvideo, setShowlocalvideo] = useState(false);
   const [showscreenvideo, setShowscreenvideo] = useState(false);
 
@@ -27,9 +27,10 @@ const Video = () => {
 
   const [userremotevideo, setUserremotevideo] = useState([]);
   const [userremoteaudio, setUserremoteaudio] = useState([]);
-  const [participants, setParticipants] = useState([]);
+  const [meetings, setMeetings] = useState([]);
 
   const [remotepatients, setRemotepatients] = useState([]);
+  const [showsessions, setShowsessions] = useState(false);
   let localTracks = {
     videoTrack: null,
     audioTrack: null,
@@ -92,18 +93,23 @@ const Video = () => {
 
   const getapps = async () => {
     let reqdata = {
-      doctor: 1,
+      email: "test3@mail.com",
     };
     const apps = await axios.post(
-      "http://localhost:5001/api/getpatients",
+      "http://localhost:5001/api/getappointments",
       reqdata
     );
-    setRemotepatients(apps.data);
-    console.log(apps.data);
+    //setRemotepatients(apps.data);
+    console.log("date", apps.data[0].meeting);
+    let meetingtoken = JSON.parse(apps.data[0].meeting);
+    console.log("json", meetingtoken);
+    meetings.push(meetingtoken);
   };
 
   useEffect(() => {
-    getapps();
+    getapps().then(() => {
+      setShowsessions(true);
+    });
   }, []);
   const sendurl = async (email) => {
     let linkdata = {
@@ -118,8 +124,7 @@ const Video = () => {
     console.log(senddatatoclient);
   };
   const createmeeting = async () => {
-    
-    let urlfortokens = `http://localhost:5001/rtc/mahee/publisher/uid/2323`;
+    let urlfortokens = `http://localhost:5001/rtc/mahee/publisher/uid/2320`;
     const tokenformeeting = await axios.get(urlfortokens);
     let newtoken = tokenformeeting.data.rtcToken;
     console.log(tokenformeeting.data.rtcToken);
@@ -128,27 +133,11 @@ const Video = () => {
     //options2.channel = channelid;
     options.token = newtoken;
     //options2.token = tokenformeeting.data.rtcToken;
-    options.uid = '2323';
+    options.uid = "2320";
     console.log(options);
-  };
-  const createssmeeting = async () => {
-    
-    let urlfortokens = `http://localhost:5001/rtc/mahee/publisher/uid/2012`;
-    const tokenformeeting = await axios.get(urlfortokens);
-    let newtoken = tokenformeeting.data.rtcToken;
-    console.log(tokenformeeting.data.rtcToken);
-    //axios.get(urlfortokens,)
-    options.channel = "mahee";
-    //options2.channel = channelid;
-    options.token = newtoken;
-    //options2.token = tokenformeeting.data.rtcToken;
-    options.uid = '2012';
-    console.log(options);
-    join2(newtoken);
-
   };
   const join = async () => {
-    console.log("updated",options);
+    console.log("updated", options);
     // Add an event listener to play remote tracks when remote user publishes.
     client.on("user-published", handleUserPublished);
     client.on("user-unpublished", handleUserUnpublished);
@@ -157,7 +146,7 @@ const Video = () => {
     [options.uid, localTracks.audioTrack, localTracks.videoTrack] =
       await Promise.all([
         // Join the channel.
-        client.join(options.appId, 'mahee', options.token, '2323'),
+        client.join(options.appId, options.channel, options.token, options.uid),
         // Create tracks to the local microphone and camera.
         AgoraRTC.createMicrophoneAudioTrack(),
         AgoraRTC.createCameraVideoTrack(),
@@ -174,12 +163,11 @@ const Video = () => {
 
     // Publish the local video and audio tracks to the channel(default is published from client 1).
     await client.publish(Object.values(localTracks));
-    console.log(participants);
-
     console.log("publish 1 success");
+
   };
 
-  const join2 = async (token) => {
+  const join2 = async () => {
     // add event listener to play remote tracks when remote user publishs.
     client2.on("user-published", handleUserPublished2);
     client2.on("user-unpublished", handleUserUnpublished2);
@@ -192,7 +180,7 @@ const Video = () => {
       client2.join(
         options.appId,
         options.channel,
-        token || null,
+        options.token || null,
         options2.uid || null
       ),
       // ** create local tracks, using microphone and screen
@@ -306,9 +294,9 @@ const Video = () => {
   function handleUserPublished(user, mediaType) {
     const id = user.uid;
     remoteUsers[id] = user;
-    setParticipants((current) => [...current, user]);
-    console.log(participants);
-    participants.map((user, i) => console.log(user.uid));
+    //setParticipants((current) => [...current, user]);
+    //console.log(participants);
+    //participants.map((user, i) => console.log(user.uid));
     subscribe(user, mediaType, client);
   }
 
@@ -344,7 +332,7 @@ const Video = () => {
 
   return (
     <React.Fragment>
-      <h2 className="left-align" id="chattitle">Video Conferencing</h2>
+      <h2 className="left-align" id="chattitle">Agora Patient</h2>
       <div className="row mx-1">
         <div>
           <button type="button" id="join" onClick={createmeeting}>
@@ -357,18 +345,22 @@ const Video = () => {
             Leave
           </button>
         </div>
-        <div>
-          users:
-          {participants.map((user, i) => (
-            <div key={i} >
-              {user.uid}
-            </div>
-          ))}
+        <div id="sessionsec">
+          <p id="sessiontitle">My Sessions</p>
+          {showsessions ? (
+            meetings.map((session, i) => (
+              <div key={i}>
+                meeting <button onClick={createmeeting}>create client</button>{" "}
+                <button onClick={join}>Join client</button>
+              </div>
+            ))
+          ) : (
+            <></>
+          )}
         </div>
-        <div id="patientsec">
-          patients:
+        <div>
           {remotepatients.map((user, i) => (
-            <div key={i} id="patientsingle">
+            <div key={i}>
               {user.patientemail}
               <button
                 onClick={() => {
@@ -414,7 +406,7 @@ const Video = () => {
             id="screen-share"
             type="button"
             className="btn btn-primary btn-sm"
-            onClick={createssmeeting}
+            onClick={join2}
           >
             Share screen
           </button>
@@ -442,4 +434,4 @@ const Video = () => {
   );
 };
 
-export default Video;
+export default Client;

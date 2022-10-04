@@ -1,0 +1,128 @@
+#mainbutton {
+  text-decoration: none;
+  background-color: rgb(2, 113, 216);
+  color: whitesmoke;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+  font-family: "lato", sans-serif;
+  margin-right: 20px;
+  margin-bottom: 15px;
+}
+#mainbuttondoc {
+  text-decoration: none;
+  background-color: rgb(240, 240, 240);
+  color: rgb(2, 113, 216);
+  padding-left: 15px;
+  padding-right: 15px;
+  font-weight: 500;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+  font-family: "lato", sans-serif;
+  margin-bottom: 15px;
+}
+#loginForm{
+    margin-top: 15px;
+}
+
+
+#chattitle{
+    font-size: 22px;
+    font-weight: 600;
+    font-family: "Lato", sans-serif;
+    color: rgb(107, 107, 107);
+}
+
+
+#chatbtnrow{
+    display: flex;
+    align-items: flex-end;
+    justify-content: right;
+}
+
+#chatainbtnsec{
+    width: fit-content;
+    margin-top: 15px;
+}
+
+#login{
+    border: none;
+    color: white;
+    background-color:rgb(2, 113, 216) ;
+    margin-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+}
+#logout{
+    border: none;
+    color: white;
+    background-color:rgb(216, 2, 2) ;
+    margin-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+}
+#join{
+    border: none;
+    color: white;
+    background-color:rgb(2, 113, 216) ;
+    margin-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 5px;
+}
+#leave{
+    border: none;
+    color: white;
+    background-color:rgb(216, 2, 2) ;
+    margin-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 5px;
+}
+
+#channeltitle{
+    margin-top: 15px;
+    font-size: 18px;
+}
+#channelbtns{
+   
+    display: flex;
+    align-items: flex-end;
+    justify-content: right;
+}
+
+#channelbtnsec{
+    width: fit-content;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#messagesec{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#send_channel_message{
+    border: none;
+    color: white;
+    background-color:rgb(37, 51, 247) ;
+    margin-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 5px;
+    margin-left: 5px;
+
+}
